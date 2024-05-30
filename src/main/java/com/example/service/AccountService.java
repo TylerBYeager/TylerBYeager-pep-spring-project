@@ -15,4 +15,9 @@ public class AccountService {
     public AccountService(AccountRepository accountRepository) {
         this.accountRepository=accountRepository;
     }
+
+    public void register(Account newAccount) {
+        accountRepository.save(newAccount);
+    }
+
 }
