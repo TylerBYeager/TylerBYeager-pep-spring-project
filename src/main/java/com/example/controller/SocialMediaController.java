@@ -56,7 +56,11 @@ public class SocialMediaController {
                .build();
     }
 
-    // @PostMapping("/messages")
+    @PostMapping("/messages")
+    public ResponseEntity<String> createMessage(@RequestBody Message message) {
+        messageService.createNewMessage(message);
+        return ResponseEntity.status(200).body("Message Created");
+    }
 
     @GetMapping("/messages")
     public ResponseEntity<List<Message>> getAllMessages() {
