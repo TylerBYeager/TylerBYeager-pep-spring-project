@@ -1,5 +1,6 @@
 package com.example.service;
 import java.util.List;
+import java.util.Optional;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,10 @@ public class MessageService {
     public List<Message> getAllMessages() {
         List<Message> messages = messageRepository.findAll();
         return messages;
+    }
 
+    public Optional<Message> getMessageById(int messageId) {
+        return messageRepository.findById(messageId);
     }
 
 }

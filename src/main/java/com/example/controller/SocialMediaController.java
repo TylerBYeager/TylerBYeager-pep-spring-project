@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,7 @@ import com.example.service.AccountService;
 import com.example.service.MessageService;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.naming.AuthenticationException;
 
@@ -62,7 +64,10 @@ public class SocialMediaController {
         return ResponseEntity.status(200).body(messages);
     }
 
-    // @GetMapping("/messages/{messageId}")
+    @GetMapping("/messages/{messageId}")
+    public ResponseEntity<Optional<Message>> getMessageById(@PathVariable int messageId) {
+        return ResponseEntity.status(200).body(messageService.getMessageById(messageId));
+    }
     
     // @PatchMapping("/messages/{messageId}")
     
