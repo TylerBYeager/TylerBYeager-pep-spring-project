@@ -1,7 +1,10 @@
 package com.example.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +15,8 @@ import com.example.entity.Account;
 import com.example.entity.Message;
 import com.example.service.AccountService;
 import com.example.service.MessageService;
+
+import java.util.List;
 
 /**
  * TODO: You will need to write your own endpoints and handlers for your controller using Spring. The endpoints you will need can be
@@ -32,12 +37,28 @@ public class SocialMediaController {
         this.messageService = messageService;
     }
 
-    // @PostMapping("/register")
-    // public ResponseEntity<String> createAccount(@RequestParam Integer accountId,
-    //                                             @RequestParam String username,
-    //                                             @RequestParam String password) {
-    //     accountService.register(new Account(accountId, username, password));
-    //     return ResponseEntity.status(200).body("Account Successfully created");
+    @PostMapping("/register")
+    public ResponseEntity<String> createAccount(@RequestBody Account newAccount) {
+        accountService.register(newAccount);
+        return ResponseEntity.status(200).body("Account Successfully created");
+    }
 
-    // }
+    // @PostMapping("/login")
+
+    // @PostMapping("/messages")
+
+    @GetMapping("/messages")
+    public ResponseEntity<List<Message>> getAllMessages() {
+        List<Message> messages = messageService.getAllMessages();
+        return ResponseEntity.status(200).body(messages);
+
+    }
+
+    // @GetMapping("/messages/{messageId}")
+    
+    // @PatchMapping("/messages/{messageId}")
+    
+    // @GetMapping("/accounts/{accountId}/messages")
+
+
 }
