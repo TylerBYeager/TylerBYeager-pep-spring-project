@@ -18,6 +18,8 @@ import com.example.service.MessageService;
 
 import java.util.List;
 
+import javax.naming.AuthenticationException;
+
 /**
  * TODO: You will need to write your own endpoints and handlers for your controller using Spring. The endpoints you will need can be
  * found in readme.md as well as the test cases. You be required to use the @GET/POST/PUT/DELETE/etc Mapping annotations
@@ -40,10 +42,17 @@ public class SocialMediaController {
     @PostMapping("/register")
     public ResponseEntity<String> createAccount(@RequestBody Account newAccount) {
         accountService.register(newAccount);
-        return ResponseEntity.status(200).body("Account Successfully created");
+        return ResponseEntity.status(200)
+               .body("Account Successfully created");
     }
 
-    // @PostMapping("/login")
+    @PostMapping("/login")
+    public ResponseEntity<Void> login(@RequestBody Account account) throws AuthenticationException{
+        accountService.login(account.getUsername(), account.getPassword());
+        return ResponseEntity.noContent()
+               .header("username", account.getUsername())
+               .build();
+    }
 
     // @PostMapping("/messages")
 
@@ -51,7 +60,6 @@ public class SocialMediaController {
     public ResponseEntity<List<Message>> getAllMessages() {
         List<Message> messages = messageService.getAllMessages();
         return ResponseEntity.status(200).body(messages);
-
     }
 
     // @GetMapping("/messages/{messageId}")

@@ -1,5 +1,7 @@
 package com.example.service;
 
+import javax.naming.AuthenticationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,4 +22,7 @@ public class AccountService {
         accountRepository.save(newAccount);
     }
 
+    public void login(String username, String password) throws AuthenticationException {
+        accountRepository.findByUsernameAndPassword(username, password);
+    }
 }
