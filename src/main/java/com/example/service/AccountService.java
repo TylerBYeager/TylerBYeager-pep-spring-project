@@ -15,11 +15,11 @@ public class AccountService {
 
     @Autowired
     public AccountService(AccountRepository accountRepository) {
-        this.accountRepository=accountRepository;
+        this.accountRepository = accountRepository;
     }
 
-    public void register(Account newAccount) {
-        accountRepository.save(newAccount);
+    public Account register(Account newAccount) {
+        return accountRepository.save(newAccount);
     }
 
     public void login(String username, String password) throws AuthenticationException {

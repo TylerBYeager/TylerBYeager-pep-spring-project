@@ -42,10 +42,9 @@ public class SocialMediaController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> createAccount(@RequestBody Account newAccount) {
-        accountService.register(newAccount);
-        return ResponseEntity.status(200)
-               .body("Account Successfully created");
+    public ResponseEntity<Account> createAccount(@RequestBody Account newAccount) {
+        Account addedAccount = accountService.register(newAccount);
+        return ResponseEntity.status(200).body(addedAccount);
     }
 
     @PostMapping("/login")
@@ -57,9 +56,9 @@ public class SocialMediaController {
     }
 
     @PostMapping("/messages")
-    public ResponseEntity<String> createMessage(@RequestBody Message message) {
-        messageService.createNewMessage(message);
-        return ResponseEntity.status(200).body("Message Created");
+    public ResponseEntity<Message> createMessage(@RequestBody Message message) {
+        Message addedMessage = messageService.createNewMessage(message);
+        return ResponseEntity.status(200).body(addedMessage);
     }
 
     @GetMapping("/messages")
