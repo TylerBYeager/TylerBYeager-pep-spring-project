@@ -3,6 +3,7 @@ package com.example.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +19,7 @@ import com.example.service.AccountService;
 import com.example.service.MessageService;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.naming.AuthenticationException;
@@ -77,10 +79,39 @@ public class SocialMediaController {
 
     @GetMapping("/messages/{messageId}")
     public ResponseEntity<Optional<Message>> getMessageById(@PathVariable int messageId) {
-        return ResponseEntity.status(200).body(messageService.getMessageById(messageId));
+        if(messageService.getMessageById(messageId).isPresent()) {
+            return ResponseEntity.status(200).body(messageService.getMessageById(messageId));
+        } else {
+            return ResponseEntity.status(200).body(null);
+        }
+        
+    }
+
+    @DeleteMapping("/messages/{messageId}")
+    public ResponseEntity<Integer> deleteMessage(@PathVariable int messageId) {
+        int rowsAffected = messageService.deleteMessageById(messageId);
+        if(rowsAffected == 1 ) {
+            return ResponseEntity.ok(rowsAffected);
+        } else {
+            return ResponseEntity.ok().build();
+        }
     }
     
-    // @PatchMapping("/messages/{messageId}")
+    @PatchMapping("/messages/{messageId}")
+    public ResponseEntity<?> updateMessage(@PathVariable int messageId, @RequestBody Map<String, String> request) {
+        String text = request.get("messageText");
+
+        if(text == null || text.isBlank() || text.length() > 255) {
+            return ResponseEntity.status(400).build();
+        }
+        int rowsAffected = messageService.updateMessageById(messageId, text);
+
+        if(rowsAffected == 1) {
+            return ResponseEntity.ok(rowsAffected);
+        } else {
+            return ResponseEntity.status(400).build();
+        }
+    }
     
     // @GetMapping("/accounts/{accountId}/messages")
 

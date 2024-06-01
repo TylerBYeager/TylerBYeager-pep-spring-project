@@ -32,4 +32,25 @@ public class MessageService {
         return messageRepository.findById(messageId);
     }
 
+    public int deleteMessageById(int id) {
+        if(messageRepository.existsById(id)) {
+            messageRepository.deleteById(id);
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    public int updateMessageById(int messageid, String text) {
+        if(text == null || text.isBlank() || text.length() >255) {
+            return 0;
+        }
+
+        return messageRepository.findById(messageid).map(message -> {
+            message.setMessageText(text);
+            messageRepository.saveAndFlush(message);
+            return 1;
+        }).orElse(0);
+    }
+
 }
