@@ -8,8 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface AccountRepository  extends JpaRepository<Account, Integer>{
 
-    Optional<Account> findByUsernameAndPassword(String username, String password);
+    Account findByUsernameAndPassword(String username, String password);
 
-    Optional<Account> findByUsername(String username);
+    boolean existsByUsername(String username);
 
 }

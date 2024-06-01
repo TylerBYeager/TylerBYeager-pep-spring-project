@@ -42,21 +42,25 @@ public class SocialMediaController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Account> createAccount(@RequestBody Account newAccount) {
-        if(!newAccount.getUsername().isBlank() || newAccount.getPassword().length() >= 4) {
-            Account addedAccount = accountService.register(newAccount);
-            return ResponseEntity.status(200).body(addedAccount);
-        } else {
+    public ResponseEntity<Account> createAccount(@RequestBody Account account) {
+        if(account.getUsername().isBlank() || account.getPassword().length() < 4) {
             return ResponseEntity.status(400).build();
         }
+        if (accountService.isUsernameTaken(account.getUsername())){
+            return ResponseEntity.status(409).body(null);
+        } 
+        Account addedAccount = accountService.register(account);
+        return ResponseEntity.status(200).body(addedAccount);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Void> login(@RequestBody Account account) throws AuthenticationException{
-        accountService.login(account.getUsername(), account.getPassword());
-        return ResponseEntity.noContent()
-               .header("username", account.getUsername())
-               .build();
+    public ResponseEntity<Account> login(@RequestBody Account account) throws AuthenticationException{
+        Account verifiedLogin = accountService.login(account.getUsername(), account.getPassword());
+        if(verifiedLogin != null) {
+            return ResponseEntity.ok(verifiedLogin);
+        } else {
+            return ResponseEntity.status(401).build();
+        }
     }
 
     @PostMapping("/messages")

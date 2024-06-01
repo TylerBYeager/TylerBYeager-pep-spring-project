@@ -24,12 +24,11 @@ public class AccountService {
         return accountRepository.save(newAccount);
     }
 
-    public void login(String username, String password) throws AuthenticationException {
-        accountRepository.findByUsernameAndPassword(username, password);
+    public Account login(String username, String password) throws AuthenticationException {
+        return accountRepository.findByUsernameAndPassword(username, password);
     }
 
-    public Optional<Account> getAccountByUsername(String username) {
-        Optional<Account> account = accountRepository.findByUsername(username);
-        return account;
+    public boolean isUsernameTaken(String username) {
+        return accountRepository.existsByUsername(username);
     }
 }
