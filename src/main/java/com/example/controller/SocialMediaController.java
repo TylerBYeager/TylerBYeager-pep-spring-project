@@ -102,13 +102,10 @@ public class SocialMediaController {
     }
     
     @PatchMapping("/messages/{messageId}")
-    public ResponseEntity<?> updateMessage(@PathVariable int messageId, @RequestBody Map<String, String> request) {
-        String text = request.get("messageText");
+    public ResponseEntity<Integer> updateMessage(@PathVariable int messageId, @RequestBody Message message) {
+        // String text = request.get("messageText");
 
-        if(text == null || text.isBlank() || text.length() > 255) {
-            return ResponseEntity.status(400).build();
-        }
-        int rowsAffected = messageService.updateMessageById(messageId, text);
+        int rowsAffected = messageService.updateMessageById(messageId, message.getMessageText());
 
         if(rowsAffected == 1) {
             return ResponseEntity.ok(rowsAffected);

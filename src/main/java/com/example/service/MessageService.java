@@ -46,11 +46,22 @@ public class MessageService {
             return 0;
         }
 
-        return messageRepository.findById(messageid).map(message -> {
-            message.setMessageText(text);
-            messageRepository.saveAndFlush(message);
+        Optional<Message> message = messageRepository.findById(messageid);
+        if(message.isPresent()) {
+            Message updatedMessage = message.get();
+            updatedMessage.setMessageText(text);
+            messageRepository.saveAndFlush(updatedMessage);
             return 1;
-        }).orElse(0);
+        } else {
+            return 0;
+        }
+
+        //alternate method of use
+        // return messageRepository.findById(messageid).map(message -> {
+        //     message.setMessageText(text);
+        //     messageRepository.saveAndFlush(message);
+        //     return 1;
+        // }).orElse(0);
     }
 
 }
