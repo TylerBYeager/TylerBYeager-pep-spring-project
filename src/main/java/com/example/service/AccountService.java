@@ -35,4 +35,8 @@ public class AccountService {
     public boolean existsById(int id) {
         return accountRepository.existsById(id);
     }
+
+    public Optional<Account> findById(int id) {
+        return accountRepository.findById(id);
+    }
 }

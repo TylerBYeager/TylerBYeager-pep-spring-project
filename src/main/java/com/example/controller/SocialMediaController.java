@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.entity.Account;
@@ -19,7 +17,6 @@ import com.example.service.AccountService;
 import com.example.service.MessageService;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import javax.naming.AuthenticationException;
@@ -114,7 +111,12 @@ public class SocialMediaController {
         }
     }
     
-    // @GetMapping("/accounts/{accountId}/messages")
+    @GetMapping("/accounts/{accountId}/messages")
+    public ResponseEntity<List<Message>> findMessagesByUser(@PathVariable int accountId) {
+        List<Message> messages = messageService.getMessagesByUser(accountId);
+        return ResponseEntity.ok(messages);
+        
+    }
 
 
 }

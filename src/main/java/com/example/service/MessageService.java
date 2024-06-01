@@ -32,6 +32,11 @@ public class MessageService {
         return messageRepository.findById(messageId);
     }
 
+    public List<Message> getMessagesByUser(int accountId) {
+        List<Message> messages = messageRepository.findByPostedBy(accountId);
+        return messages;
+    }
+
     public int deleteMessageById(int id) {
         if(messageRepository.existsById(id)) {
             messageRepository.deleteById(id);
