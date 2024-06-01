@@ -1,7 +1,6 @@
 package com.example.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,6 +39,7 @@ public class SocialMediaController {
         this.messageService = messageService;
     }
 
+    //checks against conditions and creates a valid account
     @PostMapping("/register")
     public ResponseEntity<Account> createAccount(@RequestBody Account account) {
         if(account.getUsername().isBlank() || account.getPassword().length() < 4) {
@@ -49,9 +49,10 @@ public class SocialMediaController {
             return ResponseEntity.status(409).body(null);
         } 
         Account addedAccount = accountService.register(account);
-        return ResponseEntity.status(200).body(addedAccount);
+        return ResponseEntity.ok(addedAccount);
     }
 
+    //returns a valid/authorized login
     @PostMapping("/login")
     public ResponseEntity<Account> login(@RequestBody Account account) throws AuthenticationException{
         Account verifiedLogin = accountService.login(account.getUsername(), account.getPassword());
@@ -62,32 +63,36 @@ public class SocialMediaController {
         }
     }
 
+    //checks against conditions and creates a valid new message
     @PostMapping("/messages")
     public ResponseEntity<Message> createMessage(@RequestBody Message message) {
         if(message.getMessageText().isBlank() || message.getMessageText().length() >255 || !accountService.existsById(message.getPostedBy())) {
             return ResponseEntity.status(400).build();
         }
             Message addedMessage = messageService.createNewMessage(message);
-            return ResponseEntity.status(200).body(addedMessage);
+            return ResponseEntity.ok(addedMessage);
         
     }
 
+    //returns all available messages
     @GetMapping("/messages")
     public ResponseEntity<List<Message>> getAllMessages() {
         List<Message> messages = messageService.getAllMessages();
-        return ResponseEntity.status(200).body(messages);
+        return ResponseEntity.ok(messages);
     }
 
+    //returns available message based on its messageId
     @GetMapping("/messages/{messageId}")
     public ResponseEntity<Optional<Message>> getMessageById(@PathVariable int messageId) {
         if(messageService.getMessageById(messageId).isPresent()) {
-            return ResponseEntity.status(200).body(messageService.getMessageById(messageId));
+            return ResponseEntity.ok(messageService.getMessageById(messageId));
         } else {
-            return ResponseEntity.status(200).body(null);
+            return ResponseEntity.ok(null);
         }
         
     }
 
+    //deletes a message based on its messageId
     @DeleteMapping("/messages/{messageId}")
     public ResponseEntity<Integer> deleteMessage(@PathVariable int messageId) {
         int rowsAffected = messageService.deleteMessageById(messageId);
@@ -98,6 +103,7 @@ public class SocialMediaController {
         }
     }
     
+    //updates a message's text based on its messageId
     @PatchMapping("/messages/{messageId}")
     public ResponseEntity<Integer> updateMessage(@PathVariable int messageId, @RequestBody Message message) {
         // String text = request.get("messageText");
@@ -111,12 +117,12 @@ public class SocialMediaController {
         }
     }
     
+    //returns all messages relating to a particular accountId
     @GetMapping("/accounts/{accountId}/messages")
     public ResponseEntity<List<Message>> findMessagesByUser(@PathVariable int accountId) {
         List<Message> messages = messageService.getMessagesByUser(accountId);
         return ResponseEntity.ok(messages);
         
     }
-
 
 }
