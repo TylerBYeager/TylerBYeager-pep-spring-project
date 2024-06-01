@@ -67,8 +67,12 @@ public class SocialMediaController {
 
     @PostMapping("/messages")
     public ResponseEntity<Message> createMessage(@RequestBody Message message) {
-        Message addedMessage = messageService.createNewMessage(message);
-        return ResponseEntity.status(200).body(addedMessage);
+        if(message.getMessageText().isBlank() || message.getMessageText().length() >255 || !accountService.existsById(message.getPostedBy())) {
+            return ResponseEntity.status(400).build();
+        }
+            Message addedMessage = messageService.createNewMessage(message);
+            return ResponseEntity.status(200).body(addedMessage);
+        
     }
 
     @GetMapping("/messages")

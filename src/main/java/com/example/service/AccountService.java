@@ -31,4 +31,8 @@ public class AccountService {
     public boolean isUsernameTaken(String username) {
         return accountRepository.existsByUsername(username);
     }
+
+    public boolean existsById(int id) {
+        return accountRepository.existsById(id);
+    }
 }
